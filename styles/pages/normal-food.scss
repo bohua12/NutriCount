@@ -1,0 +1,17 @@
+.normal-food{
+    @apply flex flex-col items-center justify-center;
+    &__body{
+        @apply w-[500px] pt-10;
+
+        &--macros{
+            @apply pt-5;
+            > * {
+                @apply pb-5;
+              }
+        }
+    }
+
+    .chakra-form__label{
+        @apply w-[150px];
+    }
+}

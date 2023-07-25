@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+========= Start Pages CSS =========
+**/
+@import 'pages/home-cooked';
+@import 'pages/normal-food';
+/**
+========= End Pages CSS =========
+**/
+
+/**
+========= Start Specific Component CSS =========
+**/
+
+/**
+========= End Specific Component CSS =========
+**/
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
