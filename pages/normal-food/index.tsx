@@ -14,7 +14,17 @@ import {
   Button,
 } from "@chakra-ui/react";
 
-import { Formik, Form, Field} from "formik";
+import { Formik, Form, Field } from "formik";
+
+const mealTypes = ["breakfast", "lunch", "dinner"];
+
+const formInitialValues = {
+  mealType: "",
+  foodItem: "",
+  remarks: "",
+  calories: "",
+  protein: "",
+};
 
 export default function normalFood() {
   const onSubmit = async (formResponse) => {
@@ -25,29 +35,29 @@ export default function normalFood() {
     <div className="normal-food">
       Hello this is the normal food section
       <div className="normal-food__body">
-        <Formik
-          initialValues={{
-            mealType: "",
-            foodItem: "",
-            remarks: "",
-          }}
-          onSubmit={onSubmit}
-          enableReinitialize
-        >
+        <Formik initialValues={formInitialValues} onSubmit={onSubmit}>
           {({ values, setFieldValue }) => (
             <Form>
               <Field name="mealType">
                 {({ field }) => (
                   <FormControl>
                     <FormLabel as="legend">What meal?</FormLabel>
-                    <RadioGroup id="mealType" {...field}>
+                    <RadioGroup>
                       <HStack spacing="24px">
-                        <Radio value="breakfast">Breakfast</Radio>
-                        <Radio value="lunch">Lunch</Radio>
-                        <Radio value="dinner">Dinner</Radio>
-                        <Radio value="others" fontWeight="bold">
-                          Others:
-                        </Radio>
+                        {mealTypes.map((mealType) => (
+                          <Radio
+                            key={mealType}
+                            value={mealType}
+                            onChange={() => {
+                              setFieldValue("mealType", mealType);
+                              console.log("FIELDD");
+                              console.log(field);
+                              console.log(values);
+                            }}
+                          >
+                            {mealType}
+                          </Radio>
+                        ))}
                       </HStack>
                     </RadioGroup>
                   </FormControl>
@@ -67,6 +77,52 @@ export default function normalFood() {
                 )}
               </Field>
 
+              {/* Additional Macro Information */}
+              <div className="normal-food__body--macros">
+                <Field name="calories">
+                  {({ field }) => (
+                    <Flex align="center">
+                      <FormControl className="normal-food__body--individualMacros">
+                        <FormLabel>Calories</FormLabel>
+                        <Input
+                        {...field}
+                          width="auto"
+                          type="number"
+                          placeholder="Calories"
+                        />
+                      </FormControl>
+                    </Flex>
+                  )}
+                </Field>
+
+                <Field name="protein">
+                  {({ field }) => (
+                    <Flex align="center">
+                      <FormControl className="normal-food__body--individualMacros">
+                        <FormLabel>Protein</FormLabel>
+                        <Input
+                        {...field}
+                          width="auto"
+                          type="number"
+                          placeholder="Protein"
+                        />
+                      </FormControl>
+                    </Flex>
+                  )}
+                </Field>
+
+                <Flex align="center">
+                  <FormLabel>Fat (g)</FormLabel>
+                  <Input
+                    name="fat"
+                    htmlSize={4}
+                    width="auto"
+                    type="number"
+                    placeholder="Fat"
+                  />
+                </Flex>
+              </div>
+
               <Field name="remarks">
                 {({ field }) => (
                   <FormControl>
@@ -82,63 +138,6 @@ export default function normalFood() {
             </Form>
           )}
         </Formik>
-        {/* Additional Macro Information */}
-        {/* <div className="normal-food__body--macros">
-                  <Flex align="center">
-                    <FormLabel>Calories</FormLabel>
-                    <Input
-                      name="calories"
-                      htmlSize={4}
-                      width="auto"
-                      type="number"
-                      placeholder="Calories"
-                    />
-                  </Flex>
-
-                  <Flex align="center">
-                    <FormLabel>Protein (g)</FormLabel>
-                    <Input
-                      name="protein"
-                      htmlSize={4}
-                      width="auto"
-                      type="number"
-                      placeholder="Protein"
-                    />
-                  </Flex>
-
-                  <Flex align="center">
-                    <FormLabel>Fat (g)</FormLabel>
-                    <Input
-                      name="fat"
-                      htmlSize={4}
-                      width="auto"
-                      type="number"
-                      placeholder="Fat"
-                    />
-                  </Flex>
-
-                  <Flex align="center">
-                    <FormLabel>Carbs (g)</FormLabel>
-                    <Input
-                      name="carbs"
-                      htmlSize={3}
-                      width="auto"
-                      type="number"
-                      placeholder="Carbs"
-                    />
-                  </Flex>
-
-                  <Flex align="center">
-                    <FormLabel>Sugar (g)</FormLabel>
-                    <Input
-                      name="sugar"
-                      htmlSize={2}
-                      width="auto"
-                      type="number"
-                      placeholder="Sugar"
-                    />
-                  </Flex>
-                </div> */}
       </div>
     </div>
   );

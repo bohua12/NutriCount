@@ -6,8 +6,13 @@
         &--macros{
             @apply pt-5;
             > * {
-                @apply pb-5;
+                @apply pb-5 flex;
               }
+        }
+
+        &--individualMacros{
+            @apply flex;
+            
         }
     }
 
