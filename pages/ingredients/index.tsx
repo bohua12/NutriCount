@@ -19,6 +19,7 @@ import { Formik, Form, Field } from "formik";
 const ingredientTypes = ["protein", "carb", "fiber", "others"];
 
 const formInitialValues = {
+  weight: "",
   ingredientType: "",
   foodItem: "",
   remarks: "",
@@ -40,7 +41,7 @@ export default function normalFood() {
         <Formik initialValues={formInitialValues} onSubmit={onSubmit}>
           {({ values, setFieldValue }) => (
             <Form>
-              <Field name="mealType">
+              <Field name="ingredientType">
                 {({ field }) => (
                   <FormControl>
                     <FormLabel as="legend">What kind of ingredient?</FormLabel>
@@ -51,7 +52,7 @@ export default function normalFood() {
                             key={ingredientType}
                             value={ingredientType}
                             onChange={() => {
-                              setFieldValue("mealType", ingredientType);
+                              setFieldValue("ingredientType", ingredientType);
                               console.log("FIELDD");
                               console.log(field);
                               console.log(values);
@@ -81,6 +82,22 @@ export default function normalFood() {
 
               {/* Additional Macro Information */}
               <div className="normal-food__body--macros">
+                <Field name="weight">
+                  {({ field }) => (
+                    <Flex align="center">
+                      <FormControl className="normal-food__body--individualMacros">
+                        <FormLabel>Weight(g)</FormLabel>
+                        <Input
+                        {...field}
+                          width="auto"
+                          type="number"
+                          placeholder="Weight"
+                        />
+                      </FormControl>
+                    </Flex>
+                  )}
+                </Field>
+
                 <Field name="calories">
                   {({ field }) => (
                     <Flex align="center">
@@ -113,27 +130,37 @@ export default function normalFood() {
                   )}
                 </Field>
 
-                <Flex align="center">
-                  <FormLabel>Fat (g)</FormLabel>
-                  <Input
-                    name="fat"
-                    htmlSize={4}
-                    width="auto"
-                    type="number"
-                    placeholder="Fat"
-                  />
-                </Flex>
+                <Field name="fat">
+                  {({ field }) => (
+                    <Flex align="center">
+                      <FormControl className="normal-food__body--individualMacros">
+                        <FormLabel>Fat</FormLabel>
+                        <Input
+                        {...field}
+                          width="auto"
+                          type="number"
+                          placeholder="fat"
+                        />
+                      </FormControl>
+                    </Flex>
+                  )}
+                </Field>
 
-                <Flex align="center">
-                  <FormLabel>Sugar (g)</FormLabel>
-                  <Input
-                    name="sugar"
-                    htmlSize={4}
-                    width="auto"
-                    type="number"
-                    placeholder="Sugar"
-                  />
-                </Flex>
+                <Field name="sugar">
+                  {({ field }) => (
+                    <Flex align="center">
+                      <FormControl className="normal-food__body--individualMacros">
+                        <FormLabel>Sugar (g)</FormLabel>
+                        <Input
+                        {...field}
+                          width="auto"
+                          type="number"
+                          placeholder="sugar"
+                        />
+                      </FormControl>
+                    </Flex>
+                  )}
+                </Field>
               </div>
 
               <Field name="remarks">
