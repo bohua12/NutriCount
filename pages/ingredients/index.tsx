@@ -16,22 +16,27 @@ import {
 
 import { Formik, Form, Field } from "formik";
 
+import { addIngredient } from "@/services/food";
+
 const ingredientTypes = ["protein", "carb", "fiber", "others"];
 
 const formInitialValues = {
-  weight: "",
+  ingredientName: "",
+  weight: undefined,
   ingredientType: "",
-  foodItem: "",
   remarks: "",
-  calories: "",
-  protein: "",
-  fat: "",
-  sugar: "",
+  calories: undefined,
+  protein: undefined,
+  fat: undefined,
+  sugar: undefined,
 };
 
 export default function normalFood() {
   const onSubmit = async (formResponse) => {
-    console.log(formResponse);
+    console.log(formResponse)
+    const response = await addIngredient(formResponse);
+    console.log("RESPONSE");
+    console.log(response);
   };
 
   return (
@@ -67,7 +72,7 @@ export default function normalFood() {
                 )}
               </Field>
 
-              <Field name="foodItem">
+              <Field name="ingredientName">
                 {({ field }) => (
                   <FormControl>
                     <FormLabel>Ingredient</FormLabel>
