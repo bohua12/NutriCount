@@ -1,0 +1,9 @@
+.ingredient-page {
+    &__body{
+        @apply flex flex-col items-center;
+        &__table{
+            @apply max-w-[75%];
+        }
+        
+    }
+}

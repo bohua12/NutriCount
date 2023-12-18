@@ -18,6 +18,7 @@ import {
 
 interface ingridientProps {
   allIngredients: any; // TODO: add type when backend DB type is done
+  ingredientCount: number;
 }
 
 export default function IngredientPage(prop: ingridientProps) {
@@ -26,26 +27,27 @@ export default function IngredientPage(prop: ingridientProps) {
   });
 
   return (
-    <>
-      {prop.allIngredients && prop.allIngredients.length > 0 ? (
-        <TableContainer>
-          <Table variant="simple">
-            <TableCaption>List of All Ingredients!</TableCaption>
-            <Thead>
-              <Tr>
-                <Th>Ingridient Name</Th>
-                <Th>Type</Th>
-                <Th isNumeric>Calorie</Th>
-                <Th isNumeric>Protein</Th>
-                <Th isNumeric>Fat</Th>
-                <Th isNumeric>Sugar</Th>
-                <Th isNumeric>Weight</Th>
-              </Tr>
-            </Thead>
-
-            <Tbody>
-              {
-                prop.allIngredients.map((ingredient) => (
+    <div className="ingredient-page__body">
+      <div className="ingredient-page__body__table">
+        {prop.allIngredients && prop.ingredientCount > 0 ? (
+          <TableContainer>
+            <Table variant="simple">
+              <TableCaption>
+                List of All <strong>{prop.ingredientCount}</strong> Ingredients!
+              </TableCaption>{" "}
+              <Thead>
+                <Tr>
+                  <Th>Ingridient Name</Th>
+                  <Th>Type</Th>
+                  <Th isNumeric>Calorie</Th>
+                  <Th isNumeric>Protein</Th>
+                  <Th isNumeric>Fat</Th>
+                  <Th isNumeric>Sugar</Th>
+                  <Th isNumeric>Weight</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {prop.allIngredients.map((ingredient) => (
                   <Tr key={ingredient._id}>
                     <Td>{ingredient.ingredientName}</Td>
                     <Td>{ingredient.ingredientType}</Td>
@@ -55,23 +57,15 @@ export default function IngredientPage(prop: ingridientProps) {
                     <Td isNumeric>{ingredient.sugar}</Td>
                     <Td isNumeric>{ingredient.weight}</Td>
                   </Tr>
-                ))
-              }
-            </Tbody>
-
-            <Tfoot>
-              <Tr>
-                <Th>Sugart</Th>
-                <Th>into</Th>
-                <Th isNumeric>multiply by</Th>
-              </Tr>
-            </Tfoot>
-          </Table>
-        </TableContainer>
-      ) : (
-        <div>There is no ingredient in the database!</div>
-      )}
-    </>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <div>There is no ingredient in the database!</div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -81,6 +75,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       allIngredients: getAllIngredientsResponse,
+      ingredientCount: getAllIngredientsResponse.length,
     },
   };
 };
