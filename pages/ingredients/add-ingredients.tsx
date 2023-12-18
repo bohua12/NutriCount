@@ -16,48 +16,54 @@ import {
 
 import { Formik, Form, Field } from "formik";
 
-const mealTypes = ["breakfast", "lunch", "dinner"];
+import { addIngredient } from "@/services/food";
+
+const ingredientTypes = ["protein", "carb", "fiber", "others"];
 
 const formInitialValues = {
-  mealType: "",
-  foodItem: "",
+  ingredientName: "",
+  weight: undefined,
+  ingredientType: "",
   remarks: "",
-  calories: "",
-  protein: "",
-  fat: "",
-  sugar: "",
+  calories: undefined,
+  protein: undefined,
+  fat: undefined,
+  sugar: undefined,
 };
 
 export default function normalFood() {
   const onSubmit = async (formResponse) => {
-    console.log(formResponse);
+    console.log(formResponse)
+    const response = await addIngredient(formResponse);
+    console.log("RESPONSE");
+    console.log(response);
   };
 
   return (
     <div className="normal-food">
-      Hello this is the normal food section
+      Hello this is the ingredients section
       <div className="normal-food__body">
         <Formik initialValues={formInitialValues} onSubmit={onSubmit}>
           {({ values, setFieldValue }) => (
             <Form>
-              <Field name="mealType">
+              <Field name="ingredientType">
                 {({ field }) => (
                   <FormControl>
-                    <FormLabel as="legend">What meal?</FormLabel>
+                    <FormLabel as="legend">What kind of ingredient?</FormLabel>
                     <RadioGroup>
                       <HStack spacing="24px">
-                        {mealTypes.map((mealType) => (
+                        {ingredientTypes.map((ingredientType) => (
                           <Radio
-                            key={mealType}
-                            value={mealType}
+                            key={ingredientType}
+                            value={ingredientType}
                             onChange={() => {
-                              setFieldValue("mealType", mealType);
+                              setFieldValue("ingredientType", ingredientType);
                               console.log("FIELDD");
                               console.log(field);
                               console.log(values);
                             }}
                           >
-                            {mealType}
+                            {ingredientType}
                           </Radio>
                         ))}
                       </HStack>
@@ -66,14 +72,14 @@ export default function normalFood() {
                 )}
               </Field>
 
-              <Field name="foodItem">
+              <Field name="ingredientName">
                 {({ field }) => (
                   <FormControl>
-                    <FormLabel>Food Item</FormLabel>
+                    <FormLabel>Ingredient</FormLabel>
                     <Input
                       {...field}
                       required
-                      placeholder="Name of food item"
+                      placeholder="Name of ingredient"
                     />
                   </FormControl>
                 )}
@@ -81,6 +87,22 @@ export default function normalFood() {
 
               {/* Additional Macro Information */}
               <div className="normal-food__body--macros">
+                <Field name="weight">
+                  {({ field }) => (
+                    <Flex align="center">
+                      <FormControl className="normal-food__body--individualMacros">
+                        <FormLabel>Weight(g)</FormLabel>
+                        <Input
+                        {...field}
+                          width="auto"
+                          type="number"
+                          placeholder="Weight"
+                        />
+                      </FormControl>
+                    </Flex>
+                  )}
+                </Field>
+
                 <Field name="calories">
                   {({ field }) => (
                     <Flex align="center">
@@ -113,27 +135,37 @@ export default function normalFood() {
                   )}
                 </Field>
 
-                <Flex align="center">
-                  <FormLabel>Fat (g)</FormLabel>
-                  <Input
-                    name="fat"
-                    htmlSize={4}
-                    width="auto"
-                    type="number"
-                    placeholder="Fat"
-                  />
-                </Flex>
+                <Field name="fat">
+                  {({ field }) => (
+                    <Flex align="center">
+                      <FormControl className="normal-food__body--individualMacros">
+                        <FormLabel>Fat</FormLabel>
+                        <Input
+                        {...field}
+                          width="auto"
+                          type="number"
+                          placeholder="fat"
+                        />
+                      </FormControl>
+                    </Flex>
+                  )}
+                </Field>
 
-                <Flex align="center">
-                  <FormLabel>Sugar (g)</FormLabel>
-                  <Input
-                    name="sugar"
-                    htmlSize={4}
-                    width="auto"
-                    type="number"
-                    placeholder="Sugar"
-                  />
-                </Flex>
+                <Field name="sugar">
+                  {({ field }) => (
+                    <Flex align="center">
+                      <FormControl className="normal-food__body--individualMacros">
+                        <FormLabel>Sugar (g)</FormLabel>
+                        <Input
+                        {...field}
+                          width="auto"
+                          type="number"
+                          placeholder="sugar"
+                        />
+                      </FormControl>
+                    </Flex>
+                  )}
+                </Field>
               </div>
 
               <Field name="remarks">

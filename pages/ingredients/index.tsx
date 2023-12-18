@@ -1,189 +1,86 @@
+import { getAllIngredients } from "@/services/food";
+import { GetServerSideProps } from "next/types";
 import Image from "next/image";
+import { useEffect } from "react";
+import { get } from "http";
+
 import {
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  Input,
-  Select,
-  Radio,
-  RadioGroup,
-  HStack,
-  Textarea,
-  Flex,
-  Button,
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
 } from "@chakra-ui/react";
 
-import { Formik, Form, Field } from "formik";
+interface ingridientProps {
+  allIngredients: any; // TODO: add type when backend DB type is done
+}
 
-import { addIngredient } from "@/services/food";
-
-const ingredientTypes = ["protein", "carb", "fiber", "others"];
-
-const formInitialValues = {
-  ingredientName: "",
-  weight: undefined,
-  ingredientType: "",
-  remarks: "",
-  calories: undefined,
-  protein: undefined,
-  fat: undefined,
-  sugar: undefined,
-};
-
-export default function normalFood() {
-  const onSubmit = async (formResponse) => {
-    console.log(formResponse)
-    const response = await addIngredient(formResponse);
-    console.log("RESPONSE");
-    console.log(response);
-  };
+export default function IngredientPage(prop: ingridientProps) {
+  useEffect(() => {
+    console.log(prop.allIngredients);
+  });
 
   return (
-    <div className="normal-food">
-      Hello this is the ingredients section
-      <div className="normal-food__body">
-        <Formik initialValues={formInitialValues} onSubmit={onSubmit}>
-          {({ values, setFieldValue }) => (
-            <Form>
-              <Field name="ingredientType">
-                {({ field }) => (
-                  <FormControl>
-                    <FormLabel as="legend">What kind of ingredient?</FormLabel>
-                    <RadioGroup>
-                      <HStack spacing="24px">
-                        {ingredientTypes.map((ingredientType) => (
-                          <Radio
-                            key={ingredientType}
-                            value={ingredientType}
-                            onChange={() => {
-                              setFieldValue("ingredientType", ingredientType);
-                              console.log("FIELDD");
-                              console.log(field);
-                              console.log(values);
-                            }}
-                          >
-                            {ingredientType}
-                          </Radio>
-                        ))}
-                      </HStack>
-                    </RadioGroup>
-                  </FormControl>
-                )}
-              </Field>
+    <>
+      {prop.allIngredients && prop.allIngredients.length > 0 ? (
+        <TableContainer>
+          <Table variant="simple">
+            <TableCaption>List of All Ingredients!</TableCaption>
+            <Thead>
+              <Tr>
+                <Th>Ingridient Name</Th>
+                <Th>Type</Th>
+                <Th isNumeric>Calorie</Th>
+                <Th isNumeric>Protein</Th>
+                <Th isNumeric>Fat</Th>
+                <Th isNumeric>Sugar</Th>
+                <Th isNumeric>Weight</Th>
+              </Tr>
+            </Thead>
 
-              <Field name="ingredientName">
-                {({ field }) => (
-                  <FormControl>
-                    <FormLabel>Ingredient</FormLabel>
-                    <Input
-                      {...field}
-                      required
-                      placeholder="Name of ingredient"
-                    />
-                  </FormControl>
-                )}
-              </Field>
+            <Tbody>
+              {
+                prop.allIngredients.map((ingredient) => (
+                  <Tr key={ingredient._id}>
+                    <Td>{ingredient.ingredientName}</Td>
+                    <Td>{ingredient.ingredientType}</Td>
+                    <Td isNumeric>{ingredient.calories}</Td>
+                    <Td isNumeric>{ingredient.protein}</Td>
+                    <Td isNumeric>{ingredient.fat}</Td>
+                    <Td isNumeric>{ingredient.sugar}</Td>
+                    <Td isNumeric>{ingredient.weight}</Td>
+                  </Tr>
+                ))
+              }
+            </Tbody>
 
-              {/* Additional Macro Information */}
-              <div className="normal-food__body--macros">
-                <Field name="weight">
-                  {({ field }) => (
-                    <Flex align="center">
-                      <FormControl className="normal-food__body--individualMacros">
-                        <FormLabel>Weight(g)</FormLabel>
-                        <Input
-                        {...field}
-                          width="auto"
-                          type="number"
-                          placeholder="Weight"
-                        />
-                      </FormControl>
-                    </Flex>
-                  )}
-                </Field>
-
-                <Field name="calories">
-                  {({ field }) => (
-                    <Flex align="center">
-                      <FormControl className="normal-food__body--individualMacros">
-                        <FormLabel>Calories</FormLabel>
-                        <Input
-                        {...field}
-                          width="auto"
-                          type="number"
-                          placeholder="Calories"
-                        />
-                      </FormControl>
-                    </Flex>
-                  )}
-                </Field>
-
-                <Field name="protein">
-                  {({ field }) => (
-                    <Flex align="center">
-                      <FormControl className="normal-food__body--individualMacros">
-                        <FormLabel>Protein</FormLabel>
-                        <Input
-                        {...field}
-                          width="auto"
-                          type="number"
-                          placeholder="Protein"
-                        />
-                      </FormControl>
-                    </Flex>
-                  )}
-                </Field>
-
-                <Field name="fat">
-                  {({ field }) => (
-                    <Flex align="center">
-                      <FormControl className="normal-food__body--individualMacros">
-                        <FormLabel>Fat</FormLabel>
-                        <Input
-                        {...field}
-                          width="auto"
-                          type="number"
-                          placeholder="fat"
-                        />
-                      </FormControl>
-                    </Flex>
-                  )}
-                </Field>
-
-                <Field name="sugar">
-                  {({ field }) => (
-                    <Flex align="center">
-                      <FormControl className="normal-food__body--individualMacros">
-                        <FormLabel>Sugar (g)</FormLabel>
-                        <Input
-                        {...field}
-                          width="auto"
-                          type="number"
-                          placeholder="sugar"
-                        />
-                      </FormControl>
-                    </Flex>
-                  )}
-                </Field>
-              </div>
-
-              <Field name="remarks">
-                {({ field }) => (
-                  <FormControl>
-                    <FormLabel>Remarks</FormLabel>
-                    <Textarea {...field} placeholder="Comments for this meal" />
-                  </FormControl>
-                )}
-              </Field>
-
-              <Button colorScheme="teal" variant="outline" type="submit">
-                Submit
-              </Button>
-            </Form>
-          )}
-        </Formik>
-      </div>
-    </div>
+            <Tfoot>
+              <Tr>
+                <Th>Sugart</Th>
+                <Th>into</Th>
+                <Th isNumeric>multiply by</Th>
+              </Tr>
+            </Tfoot>
+          </Table>
+        </TableContainer>
+      ) : (
+        <div>There is no ingredient in the database!</div>
+      )}
+    </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const getAllIngredientsResponse = await getAllIngredients();
+  console.log("getAllIngredientsResponse", getAllIngredientsResponse);
+  return {
+    props: {
+      allIngredients: getAllIngredientsResponse,
+    },
+  };
+};
