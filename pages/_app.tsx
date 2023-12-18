@@ -33,6 +33,24 @@ class MyApp extends App {
               >
                 Home Cooked
               </Link>
+              <Link
+                href="/ingredients"
+                ml={4}
+                mr={4}
+                color="gray.600"
+                _hover={{ color: "teal.500" }}
+              >
+                View ingredients
+              </Link>
+              <Link
+                href="/ingredients/add-ingredients"
+                ml={4}
+                mr={4}
+                color="gray.600"
+                _hover={{ color: "teal.500" }}
+              >
+                Add ingredients
+              </Link>
             </Box>
             <Spacer />
             <Box>
