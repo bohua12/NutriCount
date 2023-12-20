@@ -12,10 +12,7 @@ export const getAllIngredients = async () => {
 
 export const addIngredient = async (formResponse) => {
     console.log("formResponse", formResponse);
-    const { data, error } = await supabase.from("ingredients").insert([formResponse]);
-    if (error) {
-      console.error("Error adding ingredient", error);
-      throw error;
-    }
-    return data;
+    const { status } = await supabase.from("ingredients").insert([formResponse]);
+    console.log("here the status", status);
+    return {status: status};
   };

@@ -18,25 +18,33 @@ import { Formik, Form, Field } from "formik";
 
 import { addIngredient } from "@/services/food";
 
-const ingredientTypes = ["protein", "carb", "fiber", "others"];
+import { IngredientDBColumns, IngredientTypes, NutritionalInfoKeys } from "@/models/ingredients";
 
-const formInitialValues = {
+
+const formInitialValues : IngredientDBColumns = {
   ingredientName: "",
-  weight: undefined,
   ingredientType: "",
   remarks: "",
-  calories: undefined,
-  protein: undefined,
-  fat: undefined,
-  sugar: undefined,
+  nutritionalInfo: {
+    calories: null,
+    protein: null,
+    fat: null,
+    sugar: null,
+    weight: null,
+  },
 };
 
 export default function normalFood() {
-  const onSubmit = async (formResponse) => {
-    console.log(formResponse)
+  const onSubmit = async (formResponse, { resetForm }) => {
+    console.log("fr", formResponse);
+    console.log("fiv", formInitialValues)
     const response = await addIngredient(formResponse);
-    console.log("RESPONSE");
-    console.log(response);
+    if (response.status === 201) {
+      alert("Successfully added ingredient!");
+      resetForm({ values: { ...formInitialValues } });
+    } else {
+      alert("Failed to add ingredient!");
+    }
   };
 
   return (
@@ -52,14 +60,13 @@ export default function normalFood() {
                     <FormLabel as="legend">What kind of ingredient?</FormLabel>
                     <RadioGroup>
                       <HStack spacing="24px">
-                        {ingredientTypes.map((ingredientType) => (
+                        {IngredientTypes.map((ingredientType) => (
                           <Radio
                             key={ingredientType}
                             value={ingredientType}
                             onChange={() => {
+                              console.log("this is field", field);
                               setFieldValue("ingredientType", ingredientType);
-                              console.log("FIELDD");
-                              console.log(field);
                               console.log(values);
                             }}
                           >
@@ -87,87 +94,30 @@ export default function normalFood() {
 
               {/* Additional Macro Information */}
               <div className="normal-food__body--macros">
-                <Field name="weight">
-                  {({ field }) => (
-                    <Flex align="center">
-                      <FormControl className="normal-food__body--individualMacros">
-                        <FormLabel>Weight(g)</FormLabel>
-                        <Input
-                        {...field}
-                          width="auto"
-                          type="number"
-                          placeholder="Weight"
-                        />
-                      </FormControl>
-                    </Flex>
-                  )}
-                </Field>
-
-                <Field name="calories">
-                  {({ field }) => (
-                    <Flex align="center">
-                      <FormControl className="normal-food__body--individualMacros">
-                        <FormLabel>Calories</FormLabel>
-                        <Input
-                        {...field}
-                          width="auto"
-                          type="number"
-                          placeholder="Calories"
-                        />
-                      </FormControl>
-                    </Flex>
-                  )}
-                </Field>
-
-                <Field name="protein">
-                  {({ field }) => (
-                    <Flex align="center">
-                      <FormControl className="normal-food__body--individualMacros">
-                        <FormLabel>Protein</FormLabel>
-                        <Input
-                        {...field}
-                          width="auto"
-                          type="number"
-                          placeholder="Protein"
-                        />
-                      </FormControl>
-                    </Flex>
-                  )}
-                </Field>
-
-                <Field name="fat">
-                  {({ field }) => (
-                    <Flex align="center">
-                      <FormControl className="normal-food__body--individualMacros">
-                        <FormLabel>Fat</FormLabel>
-                        <Input
-                        {...field}
-                          width="auto"
-                          type="number"
-                          placeholder="fat"
-                        />
-                      </FormControl>
-                    </Flex>
-                  )}
-                </Field>
-
-                <Field name="sugar">
-                  {({ field }) => (
-                    <Flex align="center">
-                      <FormControl className="normal-food__body--individualMacros">
-                        <FormLabel>Sugar (g)</FormLabel>
-                        <Input
-                        {...field}
-                          width="auto"
-                          type="number"
-                          placeholder="sugar"
-                        />
-                      </FormControl>
-                    </Flex>
-                  )}
-                </Field>
+                {NutritionalInfoKeys.map((nutritionType) => (
+                  <Field name={nutritionType} key={nutritionType}>
+                    {({ field }) => (
+                      <Flex align="center">
+                        <FormControl className="normal-food__body--individualMacros">
+                          <FormLabel>
+                            {nutritionType.charAt(0).toUpperCase() +
+                              nutritionType.slice(1)}
+                          </FormLabel>
+                          <Input
+                            {...field}
+                            width="auto"
+                            type="number"
+                            placeholder={
+                              nutritionType.charAt(0).toUpperCase() +
+                              nutritionType.slice(1)
+                            }
+                          />
+                        </FormControl>
+                      </Flex>
+                    )}
+                  </Field>
+                ))}
               </div>
-
               <Field name="remarks">
                 {({ field }) => (
                   <FormControl>

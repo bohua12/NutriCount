@@ -3,6 +3,11 @@ import { GetServerSideProps } from "next/types";
 import Image from "next/image";
 import { useEffect } from "react";
 import { get } from "http";
+import {
+  IngredientDBColumns,
+  GetIngredientDBColumns,
+  NutritionalInfoKeys,
+} from "@/models/ingredients";
 
 import {
   Table,
@@ -17,7 +22,7 @@ import {
 } from "@chakra-ui/react";
 
 interface ingridientProps {
-  allIngredients: any; // TODO: add type when backend DB type is done
+  allIngredients: GetIngredientDBColumns[];
   ingredientCount: number;
 }
 
@@ -39,25 +44,27 @@ export default function IngredientPage(prop: ingridientProps) {
                 <Tr>
                   <Th>Ingridient Name</Th>
                   <Th>Type</Th>
-                  <Th isNumeric>Calorie</Th>
-                  <Th isNumeric>Protein</Th>
-                  <Th isNumeric>Fat</Th>
-                  <Th isNumeric>Sugar</Th>
-                  <Th isNumeric>Weight</Th>
+                  {NutritionalInfoKeys.map((nutritionalInfo) => (
+                    <Th key={nutritionalInfo} isNumeric>
+                      {nutritionalInfo}
+                    </Th>
+                  ))}
                 </Tr>
               </Thead>
               <Tbody>
-                {prop.allIngredients.map((ingredient) => (
-                  <Tr key={ingredient._id}>
-                    <Td>{ingredient.ingredientName}</Td>
-                    <Td>{ingredient.ingredientType}</Td>
-                    <Td isNumeric>{ingredient.calories}</Td>
-                    <Td isNumeric>{ingredient.protein}</Td>
-                    <Td isNumeric>{ingredient.fat}</Td>
-                    <Td isNumeric>{ingredient.sugar}</Td>
-                    <Td isNumeric>{ingredient.weight}</Td>
-                  </Tr>
-                ))}
+                {prop.allIngredients.map(
+                  (ingredient: GetIngredientDBColumns) => (
+                    <Tr key={ingredient.id}>
+                      <Td>{ingredient.ingredientName}</Td>
+                      <Td>{ingredient.ingredientType}</Td>
+                      <Td isNumeric>{ingredient.nutritionalInfo.calories}</Td>
+                      <Td isNumeric>{ingredient.nutritionalInfo.protein}</Td>
+                      <Td isNumeric>{ingredient.nutritionalInfo.fat}</Td>
+                      <Td isNumeric>{ingredient.nutritionalInfo.sugar}</Td>
+                      <Td isNumeric>{ingredient.nutritionalInfo.weight}</Td>
+                    </Tr>
+                  )
+                )}
               </Tbody>
             </Table>
           </TableContainer>
