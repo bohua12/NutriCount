@@ -2,10 +2,7 @@ import Image from "next/image";
 import {
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   Input,
-  Select,
   Radio,
   RadioGroup,
   HStack,
@@ -18,10 +15,13 @@ import { Formik, Form, Field } from "formik";
 
 import { addIngredient } from "@/services/food";
 
-import { IngredientDBColumns, IngredientTypes, NutritionalInfoKeys } from "@/models/ingredients";
+import {
+  IngredientDBColumns,
+  IngredientTypes,
+  NutritionalInfoKeys,
+} from "@/models/ingredients";
 
-
-const formInitialValues : IngredientDBColumns = {
+const formInitialValues: IngredientDBColumns = {
   ingredientName: "",
   ingredientType: "",
   remarks: "",
@@ -34,10 +34,10 @@ const formInitialValues : IngredientDBColumns = {
   },
 };
 
-export default function normalFood() {
+const AddIngredient = () => {
   const onSubmit = async (formResponse, { resetForm }) => {
     console.log("fr", formResponse);
-    console.log("fiv", formInitialValues)
+    console.log("fiv", formInitialValues);
     const response = await addIngredient(formResponse);
     if (response.status === 201) {
       alert("Successfully added ingredient!");
@@ -136,4 +136,6 @@ export default function normalFood() {
       </div>
     </div>
   );
-}
+};
+
+export default AddIngredient;

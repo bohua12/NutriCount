@@ -1,0 +1,10 @@
+.ingredient-detail-modal{
+    &__footer{
+        display: flex;
+        justify-content: space-between !important;
+        &__createdAt{
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+    }
+}

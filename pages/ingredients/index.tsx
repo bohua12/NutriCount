@@ -1,32 +1,33 @@
 import { getAllIngredients } from "@/services/food";
 import { GetServerSideProps } from "next/types";
-import Image from "next/image";
-import { useEffect } from "react";
-import { get } from "http";
-import {
-  IngredientDBColumns,
-  GetIngredientDBColumns,
-  NutritionalInfoKeys,
-} from "@/models/ingredients";
-
+import { useEffect, useState } from "react";
 import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
   TableCaption,
   TableContainer,
+  useDisclosure,
 } from "@chakra-ui/react";
 
+import {
+  GetIngredientDBColumns,
+  NutritionalInfoKeys,
+} from "@/models/ingredients";
+
+import IngredientDetailModal from "@/components/ingredients/ingredient-detail-modal";
 interface ingridientProps {
   allIngredients: GetIngredientDBColumns[];
   ingredientCount: number;
 }
 
-export default function IngredientPage(prop: ingridientProps) {
+const IngredientPage = (prop: ingridientProps) => {
+
+  const { isOpen: isIngredientDetailOpen, onOpen: onIngredientDetailOpen, onClose: onIngredientDetailClose } = useDisclosure()
+  const [selectedIngredient, setSelectedIngredient] = useState<GetIngredientDBColumns | null>(null);
   useEffect(() => {
     console.log(prop.allIngredients);
   });
@@ -36,7 +37,7 @@ export default function IngredientPage(prop: ingridientProps) {
       <div className="ingredient-page__body__table">
         {prop.allIngredients && prop.ingredientCount > 0 ? (
           <TableContainer>
-            <Table variant="simple">
+            <Table variant="simple" colorScheme="telegram">
               <TableCaption>
                 List of All <strong>{prop.ingredientCount}</strong> Ingredients!
               </TableCaption>{" "}
@@ -55,7 +56,12 @@ export default function IngredientPage(prop: ingridientProps) {
                 {prop.allIngredients.map(
                   (ingredient: GetIngredientDBColumns) => (
                     <Tr key={ingredient.id}>
-                      <Td>{ingredient.ingredientName}</Td>
+                      <Td onClick={() => {
+                        setSelectedIngredient(ingredient);
+                        console.log("selectedIngredient", selectedIngredient)
+                        onIngredientDetailOpen();
+                        // HELP: I want to pass the ingredient object to the modal
+                      }}>{ingredient.ingredientName}</Td>
                       <Td>{ingredient.ingredientType}</Td>
                       <Td isNumeric>{ingredient.nutritionalInfo.calories}</Td>
                       <Td isNumeric>{ingredient.nutritionalInfo.protein}</Td>
@@ -72,6 +78,7 @@ export default function IngredientPage(prop: ingridientProps) {
           <div>There is no ingredient in the database!</div>
         )}
       </div>
+      <IngredientDetailModal isOpen={isIngredientDetailOpen} onClose={onIngredientDetailClose} ingredient={selectedIngredient}/>
     </div>
   );
 }
@@ -86,3 +93,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 };
+
+export default IngredientPage;
